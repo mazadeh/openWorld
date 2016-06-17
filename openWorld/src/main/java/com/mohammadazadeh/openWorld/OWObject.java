@@ -1,6 +1,10 @@
 package com.mohammadazadeh.openWorld;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GLAutoDrawable;
 
 public class OWObject {
 	public String name;
@@ -15,4 +19,17 @@ public class OWObject {
 	
 	public OWObject parentObject;
 	public List<OWObject> subObjects;
+	
+	public OWObject(String name)
+	{
+		this.name = name;
+		parentObject = null;
+		subObjects = new ArrayList<OWObject>();
+	}
+	
+	public void display(GLAutoDrawable drawable) {
+		GL2 gl = drawable.getGL().getGL2();
+		
+		gl.glFlush();
+	}
 }

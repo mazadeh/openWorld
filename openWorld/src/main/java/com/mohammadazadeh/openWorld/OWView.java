@@ -12,19 +12,19 @@ import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
-import java.awt.FlowLayout;
 
 public class OWView extends JPanel implements GLEventListener{
 
 	private static final long serialVersionUID = 1L;
+	
+	private OWObjectRepository repository;
+	
 	private GLCanvas glCanvas;
 	/**
 	 * Create the panel.
 	 */
-	public OWView() {
-		FlowLayout flowLayout = (FlowLayout) getLayout();
-		flowLayout.setVgap(0);
-		flowLayout.setHgap(0);
+	public OWView(OWObjectRepository repository) {
+		this.repository = repository;
 		setBackground(new Color(1f, 1f, 0f));
 		
 		GLProfile profile = GLProfile.get(GLProfile.GL2);
@@ -70,6 +70,8 @@ public class OWView extends JPanel implements GLEventListener{
 		gl.glClearColor(0.392f, 0.584f, 0.929f, 1.0f);
 		gl.glLoadIdentity();
 		
+		repository.display(drawable);
+		
 		gl.glBegin(GL2.GL_POLYGON);
 		{
 			gl.glColor3f(1f, 0f, 0f);
@@ -95,5 +97,12 @@ public class OWView extends JPanel implements GLEventListener{
 	{
 		Dimension dim = getSize();
 		glCanvas.setBounds(0, 0, (int) dim.getWidth(), (int) dim.getHeight());
+	}
+	
+	@Override
+	public void repaint()
+	{
+		// TODO: Force OpenGL to repaint.
+		super.repaint();
 	}
 }
