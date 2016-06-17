@@ -1,11 +1,7 @@
 package com.mohammadazadeh.openWorld;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
 public class OWFrame extends JFrame {
 
@@ -14,6 +10,7 @@ public class OWFrame extends JFrame {
 	final private int height = 576;
 	
 	private JPanel contentPane;
+	private OWView view;
 
 	/**
 	 * Create the frame.
@@ -26,9 +23,15 @@ public class OWFrame extends JFrame {
 		setVisible(true);
 		
 		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setLayout(null);
 		setContentPane(contentPane);
+		
+		view = new OWView();
+		view.setBounds(0, 0, (width + height) / 2, height);
+		contentPane.add(view);
+		view.init();
+		//setContentPane(view);
+		repaint();
 	}
 
 }
