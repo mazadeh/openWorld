@@ -170,8 +170,8 @@ public class OWMenuPanel extends JPanel implements ActionListener, ChangeListene
 			locationZ.setEnabled(true);
 			
 			locationX.setValue(selectedObject.position[0]);
-			locationX.setValue(selectedObject.position[1]);
-			locationX.setValue(selectedObject.position[2]);
+			locationY.setValue(selectedObject.position[1]);
+			locationZ.setValue(selectedObject.position[2]);
 		}
 		else
 		{
@@ -179,15 +179,15 @@ public class OWMenuPanel extends JPanel implements ActionListener, ChangeListene
 			locationY.setEnabled(false);
 			locationZ.setEnabled(false);
 		}
-		if (selectedObject.rotation != null)
+		if (selectedObject.rotationTeta != null)
 		{
 			rotationX.setEnabled(true);
 			rotationY.setEnabled(true);
 			rotationZ.setEnabled(true);
 			
-			rotationX.setValue(selectedObject.rotation[0]);
-			rotationX.setValue(selectedObject.rotation[1]);
-			rotationX.setValue(selectedObject.rotation[2]);
+			rotationX.setValue(selectedObject.rotationTeta[0]);
+			rotationY.setValue(selectedObject.rotationTeta[1]);
+			rotationZ.setValue(selectedObject.rotationTeta[2]);
 		}
 		else
 		{

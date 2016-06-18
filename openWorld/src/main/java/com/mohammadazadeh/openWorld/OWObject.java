@@ -27,6 +27,7 @@ public class OWObject {
 		this.name = name;
 		parentObject = null;
 		subObjects = new HashMap<String, OWObject>();
+		rotationTeta = new float[3];
 	}
 	
 	public void display(GLAutoDrawable drawable) {
