@@ -33,6 +33,7 @@ public class OWView extends JPanel implements GLEventListener{
 		cameraFreeView.position[0] = 10;
 		cameraFreeView.position[1] = 4.5f;
 		cameraFreeView.position[2] = 10;
+		cameraFreeView.rotationTeta[0] = 45;
 		this.repository = repository;
 		this.repository.cameraList.add(cameraFreeView);
 		selectedCamera = cameraFreeView;
@@ -81,14 +82,22 @@ public class OWView extends JPanel implements GLEventListener{
 		gl.glClearColor(0.392f, 0.584f, 0.929f, 1.0f);
 		gl.glLoadIdentity();
 		
+		if (selectedCamera.rotationTeta == null)
+			selectedCamera.rotationTeta = new float[3];
+		
+		float teta = (float)Math.PI * (selectedCamera.rotationTeta[0] / 180.0f);
+		float phi = (float)Math.PI * (selectedCamera.rotationTeta[1] / 180.0f);
+		
+		
 		glu.gluLookAt(
-				selectedCamera.position[0],
-				selectedCamera.position[1],
-				selectedCamera.position[2],
-				0, 0, 0,
+				selectedCamera.position[0] * Math.cos(teta) * Math.cos(phi),
+				selectedCamera.position[0] * Math.sin(phi) + selectedCamera.position[0],
+				selectedCamera.position[0] * Math.sin(teta) * Math.cos(phi),
+				0, selectedCamera.position[1], 0,
 				0, 1, 0);
 		
 		repository.display(drawable);
+		
 		gl.glScaled(3, 3, 3);
 		gl.glBegin(GL2.GL_POLYGON);
 		{

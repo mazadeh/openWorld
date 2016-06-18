@@ -66,16 +66,22 @@ public class OWFrame extends JFrame implements KeyListener {
 		switch (event.getKeyCode())
 		{
 		case KeyEvent.VK_UP:
-			view.selectedCamera.position[0]--;
+			view.selectedCamera.rotationTeta[1]++;
 			break;
 		case KeyEvent.VK_DOWN:
-			view.selectedCamera.position[0]++;
+			view.selectedCamera.rotationTeta[1]--;
 			break;
 		case KeyEvent.VK_LEFT:
-			view.selectedCamera.position[2]++;
+			view.selectedCamera.rotationTeta[0]++;
 			break;
 		case KeyEvent.VK_RIGHT:
-			view.selectedCamera.position[2]--;
+			view.selectedCamera.rotationTeta[0]--;
+			break;
+		case KeyEvent.VK_MINUS:
+			view.selectedCamera.position[0]++;
+			break;
+		case KeyEvent.VK_EQUALS:
+			view.selectedCamera.position[0]--;
 			break;
 		}
 		view.repaint();
