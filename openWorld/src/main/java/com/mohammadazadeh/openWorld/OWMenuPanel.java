@@ -224,7 +224,57 @@ public class OWMenuPanel extends JPanel implements ActionListener, ChangeListene
 	@Override
 	public void stateChanged(ChangeEvent event) {
 		String sourceName = ((JSpinner) event.getSource()).getName();
-		System.out.println(sourceName);
+		float value;
+		
+		if (sourceName.equals("Location X") && selectedObject.position != null)
+		{
+			if (locationX.getValue() instanceof Integer)
+				value = (int)locationX.getValue();
+			else
+				value = (float)locationX.getValue();
+			selectedObject.position[0] = value;
+		}
+		if (sourceName.equals("Location Y") && selectedObject.position != null)
+		{
+			if (locationY.getValue() instanceof Integer)
+				value = (int)locationY.getValue();
+			else
+				value = (float)locationY.getValue();
+			selectedObject.position[1] = value;
+		}
+		if (sourceName.equals("Location Z") && selectedObject.position != null)
+		{
+			if (locationZ.getValue() instanceof Integer)
+				value = (int)locationZ.getValue();
+			else
+				value = (float)locationZ.getValue();
+			selectedObject.position[2] = value;
+		}
+		if (sourceName.equals("Rotation X") && selectedObject.rotationTeta != null)
+		{
+			if (rotationX.getValue() instanceof Integer)
+				value = (int)rotationX.getValue();
+			else
+				value = (float)rotationX.getValue();
+			selectedObject.rotationTeta[0] = value;
+		}
+		if (sourceName.equals("Rotation Y") && selectedObject.rotationTeta != null)
+		{
+			if (rotationY.getValue() instanceof Integer)
+				value = (int)rotationY.getValue();
+			else
+				value = (float)rotationY.getValue();
+			selectedObject.rotationTeta[1] = value;
+		}
+		if (sourceName.equals("Rotation Z") && selectedObject.rotationTeta != null)
+		{
+			if (rotationZ.getValue() instanceof Integer)
+				value = (int)rotationZ.getValue();
+			else
+				value = (float)rotationZ.getValue();
+			selectedObject.rotationTeta[2] = value;
+		}
+		view.repaint();
 	}
 
 	@Override
