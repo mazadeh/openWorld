@@ -4,25 +4,41 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map.Entry;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 
-public class OWMenuPanel extends JPanel implements ActionListener, ChangeListener{
+public class OWMenuPanel extends JPanel implements ActionListener, ChangeListener, TreeSelectionListener{
 
 	private static final long serialVersionUID = 1L;
 
 	private OWObjectRepository repository;
+	private OWObject selectedObject;
+	private OWView view;
 	
 	private JLabel cameraLabel;
 	private JComboBox<Object> cameraBox;
 
 	private JLabel objectLabel;
-	private JComboBox<Object> objectBox;
+	private JScrollPane objectScrollPane;
+	private JTree objectTree;
+
+	JTabbedPane settingPane;
+	private JPanel positionPanel;
+	private JPanel lightPanel;
+	private JPanel cameraPanel;
 	
 	private JLabel locationLabel;
 	private JSpinner locationX;
@@ -36,76 +52,98 @@ public class OWMenuPanel extends JPanel implements ActionListener, ChangeListene
 	/**
 	 * Create the panel.
 	 */
-	public OWMenuPanel(OWObjectRepository repository) {
-		this.repository = repository;
+	public OWMenuPanel(OWView view) {
 		setLayout(null);
 		setBackground(new Color(0f, 1f, 1f));
 		
-		cameraLabel = new JLabel("Camera");
-		cameraLabel.setBounds(10, 15, 100, 22);
+		this.view = view;
+		repository = view.getRepository();
+		
+		cameraLabel = new JLabel("Select View");
+		cameraLabel.setBounds(10, 10, 100, 22);
 		
 		cameraBox = new JComboBox<Object>();
-		cameraBox.setBounds(10, 40, 180, 22);
+		cameraBox.setBounds(10, 35, 180, 22);
 		cameraBox.setActionCommand("camera list");
 		cameraBox.addActionListener(this);
 
 		objectLabel = new JLabel("Object List");
-		objectLabel.setBounds(10, 75, 100, 22);
+		objectLabel.setBounds(10, 65, 100, 22);
 		
-		objectBox = new JComboBox<Object>();
-		objectBox.setBounds(10, 100, 180, 22);
-		objectBox.setActionCommand("object list");
-		objectBox.addActionListener(this);
-
-		locationLabel = new JLabel("Location");
-		locationLabel.setBounds(10, 135, 100, 22);
-
-		locationX = new JSpinner();
-		locationX.setName("Location X");
-		locationX.setBounds(10, 160, 100, 22);
-		locationX.addChangeListener(this);
-
-		locationY = new JSpinner();
-		locationY.setName("Location Y");
-		locationY.setBounds(10, 190, 100, 22);
-		locationY.addChangeListener(this);
-
-		locationZ = new JSpinner();
-		locationZ.setName("Location Z");
-		locationZ.setBounds(10, 220, 100, 22);
-		locationZ.addChangeListener(this);
+		objectScrollPane = new JScrollPane();
+		objectScrollPane.setBounds(10, 90, 180, 100);
 		
+		objectTree = new JTree();
+		objectScrollPane.setViewportView(objectTree);
+		objectTree.setModel(null);
+		objectTree.addTreeSelectionListener(this);
 		
-		rotationLabel = new JLabel("Rotation");
-		rotationLabel.setBounds(10, 255, 100, 22);
+		settingPane = new JTabbedPane(JTabbedPane.TOP);
+		settingPane.setBounds(10, 200, 180, 360);
+		{
+			positionPanel = new JPanel();
+			positionPanel.setLayout(null);
+			{
+				locationLabel = new JLabel("Location");
+				locationLabel.setBounds(5, 5, 100, 22);
+				locationX = new JSpinner();
+				locationX.setName("Location X");
+				locationX.addChangeListener(this);
+				locationX.setBounds(5, 30, 100, 22);
+				locationY = new JSpinner();
+				locationY.setName("Location Y");
+				locationY.addChangeListener(this);
+				locationY.setBounds(5, 60, 100, 22);
+				locationZ = new JSpinner();
+				locationZ.setName("Location Z");
+				locationZ.addChangeListener(this);
+				locationZ.setBounds(5, 90, 100, 22);
+				
+				rotationLabel = new JLabel("Rotation");
+				rotationLabel.setBounds(5, 115, 100, 22);
+				rotationX = new JSpinner();
+				rotationX.setName("Rotation X");
+				rotationX.addChangeListener(this);
+				rotationX.setBounds(5, 140, 100, 22);
+				rotationY = new JSpinner();
+				rotationY.setName("Rotation Y");
+				rotationY.addChangeListener(this);
+				rotationY.setBounds(5, 170, 100, 22);
+				rotationZ = new JSpinner();
+				rotationZ.setName("Rotation Z");
+				rotationZ.addChangeListener(this);
+				rotationZ.setBounds(5, 200, 100, 22);
+				
+				positionPanel.add(locationLabel);
+				positionPanel.add(locationX);
+				positionPanel.add(locationY);
+				positionPanel.add(locationZ);
+				positionPanel.add(rotationLabel);
+				positionPanel.add(rotationX);
+				positionPanel.add(rotationY);
+				positionPanel.add(rotationZ);
+			}
+			lightPanel = new JPanel();
+			lightPanel.setLayout(null);
+			{
+				
+			}
+			cameraPanel = new JPanel();
+			cameraPanel.setLayout(null);
+			{
+				
+			}
 
-		rotationX = new JSpinner();
-		rotationX.setName("Rotation X");
-		rotationX.setBounds(10, 280, 100, 22);
-		rotationX.addChangeListener(this);
-
-		rotationY = new JSpinner();
-		rotationY.setName("Rotation Y");
-		rotationY.setBounds(10, 310, 100, 22);
-		rotationY.addChangeListener(this);
-
-		rotationZ = new JSpinner();
-		rotationZ.setName("Rotation Z");
-		rotationZ.setBounds(10, 340, 100, 22);
-		rotationZ.addChangeListener(this);
+			settingPane.addTab("Position", null, positionPanel, null);
+			settingPane.addTab("Lighting", null, lightPanel, null);
+			settingPane.addTab("Camera", null, cameraPanel, null);
+		}
 		
 		add(cameraLabel);
 		add(cameraBox);
 		add(objectLabel);
-		add(objectBox);
-		add(locationLabel);
-		add(locationX);
-		add(locationY);
-		add(locationZ);
-		add(rotationLabel);
-		add(rotationX);
-		add(rotationY);
-		add(rotationZ);
+		add(objectScrollPane);
+		add(settingPane);
 	}
 	
 	public void init()
@@ -114,22 +152,94 @@ public class OWMenuPanel extends JPanel implements ActionListener, ChangeListene
 		{
 			cameraBox.addItem(camera.name);
 		}
-		for (OWObject object : repository.objectList)
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Objects");
+		for (Entry<String, OWObject> obj : repository.objectList.entrySet())
 		{
-			objectBox.addItem(object.name);
+			addObjectTree(obj.getValue(), root);
+		}
+		objectTree.setModel(new DefaultTreeModel(root));
+		repaint();
+	}
+	
+	public void settingPaneInit()
+	{
+		if (selectedObject.position != null)
+		{
+			locationX.setEnabled(true);
+			locationY.setEnabled(true);
+			locationZ.setEnabled(true);
+			
+			locationX.setValue(selectedObject.position[0]);
+			locationX.setValue(selectedObject.position[1]);
+			locationX.setValue(selectedObject.position[2]);
+		}
+		else
+		{
+			locationX.setEnabled(false);
+			locationY.setEnabled(false);
+			locationZ.setEnabled(false);
+		}
+		if (selectedObject.rotation != null)
+		{
+			rotationX.setEnabled(true);
+			rotationY.setEnabled(true);
+			rotationZ.setEnabled(true);
+			
+			rotationX.setValue(selectedObject.rotation[0]);
+			rotationX.setValue(selectedObject.rotation[1]);
+			rotationX.setValue(selectedObject.rotation[2]);
+		}
+		else
+		{
+			rotationX.setEnabled(false);
+			rotationY.setEnabled(false);
+			rotationZ.setEnabled(false);
 		}
 		repaint();
 	}
 	
+	public void addObjectTree(OWObject object, DefaultMutableTreeNode node)
+	{
+		DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(object.name);
+		if (object.subObjects != null)
+		{
+			for (Entry<String, OWObject> obj : object.subObjects.entrySet())
+			{
+				addObjectTree(obj.getValue(), childNode);
+			}
+		}
+		node.add(childNode);
+	}
+	
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void actionPerformed(ActionEvent event) {
+		String command = event.getActionCommand();
+		if (command.equals("camera list"))
+		{
+			view.selectedCamera = repository.cameraList.get(cameraBox.getSelectedIndex());
+			view.repaint();
+		}
 	}
 
 	@Override
-	public void stateChanged(ChangeEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void stateChanged(ChangeEvent event) {
+		String sourceName = ((JSpinner) event.getSource()).getName();
+		System.out.println(sourceName);
+	}
+
+	@Override
+	public void valueChanged(TreeSelectionEvent event) {
+		Object[] path = event.getPath().getPath();
+		if (path.length < 2)
+		{
+			return;
+		}
+		OWObject obj = repository.objectList.get(path[1].toString());
+		for (int index = 2; index < path.length; index++)
+		{
+			obj = obj.subObjects.get(path[index].toString());
+		}
+		selectedObject = obj;
+		settingPaneInit();
 	}
 }

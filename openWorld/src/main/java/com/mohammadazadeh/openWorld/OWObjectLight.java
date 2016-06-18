@@ -13,7 +13,6 @@ public class OWObjectLight extends OWObject{
 	public float cutOffAngle;
 	public float[] color;
 	public float[] direction;
-	public float[] location;
 	
 	public OWObjectLight(String name)
 	{

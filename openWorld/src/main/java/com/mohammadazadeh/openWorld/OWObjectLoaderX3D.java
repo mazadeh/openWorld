@@ -18,6 +18,8 @@ public class OWObjectLoaderX3D extends DefaultHandler{
 
 	private OWObject object;
 	private OWObjectMaterial material;
+	private OWObjectLight light;
+	private OWObjectCamera camera;
 	private boolean isNewMTL;
 	
 	public OWObjectLoaderX3D(OWObjectRepository repository)
@@ -41,7 +43,9 @@ public class OWObjectLoaderX3D extends DefaultHandler{
 		File input = new File(path + name);
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		SAXParser saxParser = factory.newSAXParser();
+		object = new OWObject(name);
 		saxParser.parse(input, this);
+		repository.objectList.put(object.name, object);
 	}
 	
 	@Override
@@ -57,17 +61,10 @@ public class OWObjectLoaderX3D extends DefaultHandler{
 		switch (qName)
 		{
 		case "Transform":
-			if (object == null)
-			{
-				object = new OWObject(attributes.getValue("DEF"));
-			}
-			else
-			{
-				OWObject obj = new OWObject(attributes.getValue("DEF"));
-				obj.parentObject = object;
-				object.subObjects.add(obj);
-				object = obj;
-			}
+			OWObject obj = new OWObject(attributes.getValue("DEF"));
+			obj.parentObject = object;
+			object.subObjects.put(obj.name, obj);
+			object = obj;
 			if (attributes.getValue("translation") != null)
 			{
 				scan = new Scanner(attributes.getValue("translation"));
@@ -181,9 +178,9 @@ public class OWObjectLoaderX3D extends DefaultHandler{
 			}
 			break;
 		case "SpotLight":
-			OWObjectLight light = new OWObjectLight(attributes.getValue("DEF"));
+			light = new OWObjectLight(attributes.getValue("DEF"));
 			light.parentObject = object;
-			object.subObjects.add(light);
+			object.subObjects.put(light.name, light);
 			object = light;
 			
 			if (attributes.getValue("radius") != null)
@@ -228,16 +225,16 @@ public class OWObjectLoaderX3D extends DefaultHandler{
 			{
 				scan = new Scanner(attributes.getValue("location"));
 				
-				light.location = new float[3];
-				light.location[0] = scan.nextFloat();
-				light.location[1] = scan.nextFloat();
-				light.location[2] = scan.nextFloat();
+				light.position = new float[3];
+				light.position[0] = scan.nextFloat();
+				light.position[1] = scan.nextFloat();
+				light.position[2] = scan.nextFloat();
 			}
 			break;
 		case "Viewpoint":
-			OWObjectCamera camera = new OWObjectCamera(attributes.getValue("DEF"));
+			camera = new OWObjectCamera(attributes.getValue("DEF"));
 			camera.parentObject = object;
-			object.subObjects.add(camera);
+			object.subObjects.put(camera.name, camera);
 			object = camera;
 
 			if (attributes.getValue("radius") != null)
@@ -281,13 +278,7 @@ public class OWObjectLoaderX3D extends DefaultHandler{
 		switch (qName)
 		{
 		case "Transform":
-			if (object.parentObject == null) {
-				object.material = material;
-				repository.objectList.add(object);
-			}
-			else {
-				object = object.parentObject;
-			}
+			object = object.parentObject;
 			break;
 		case "SpotLight":
 			repository.lightList.add((OWObjectLight) object);
@@ -301,6 +292,7 @@ public class OWObjectLoaderX3D extends DefaultHandler{
 			if (material != null && isNewMTL) {
 				repository.materialList.put(material.name, material);
 			}
+			object.material = material;
 			break;
 		}
 	}

@@ -2,6 +2,7 @@ package com.mohammadazadeh.openWorld;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.KeyListener;
 
 import javax.swing.JPanel;
 
@@ -18,13 +19,24 @@ public class OWView extends JPanel implements GLEventListener{
 	private static final long serialVersionUID = 1L;
 	
 	private OWObjectRepository repository;
+	private OWObjectCamera cameraFreeView;
+	public  OWObjectCamera selectedCamera;
 	
 	private GLCanvas glCanvas;
 	/**
 	 * Create the panel.
 	 */
 	public OWView(OWObjectRepository repository) {
+		cameraFreeView = new OWObjectCamera("Free View");
+		cameraFreeView.position = new float[3];
+		cameraFreeView.rotationTeta = new float[3];
+		cameraFreeView.position[0] = 10;
+		cameraFreeView.position[1] = 4.5f;
+		cameraFreeView.position[2] = 10;
 		this.repository = repository;
+		this.repository.cameraList.add(cameraFreeView);
+		selectedCamera = cameraFreeView;
+		
 		setBackground(new Color(1f, 1f, 0f));
 		
 		GLProfile profile = GLProfile.get(GLProfile.GL2);
@@ -54,7 +66,6 @@ public class OWView extends JPanel implements GLEventListener{
         gl.glLoadIdentity();
         gl.glEnable(GL2.GL_DEPTH_TEST);
         gl.glEnable(GL2.GL_DOUBLEBUFFER);
-		
 	}
 
 	public void dispose(GLAutoDrawable drawable) {
@@ -64,24 +75,48 @@ public class OWView extends JPanel implements GLEventListener{
 
 	public void display(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
-		//GLU glu = GLU.createGLU(gl);
+		GLU glu = GLU.createGLU(gl);
 		
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 		gl.glClearColor(0.392f, 0.584f, 0.929f, 1.0f);
 		gl.glLoadIdentity();
 		
-		repository.display(drawable);
+		glu.gluLookAt(
+				selectedCamera.position[0],
+				selectedCamera.position[1],
+				selectedCamera.position[2],
+				0, 0, 0,
+				0, 1, 0);
 		
+		repository.display(drawable);
+		gl.glScaled(3, 3, 3);
 		gl.glBegin(GL2.GL_POLYGON);
 		{
-			gl.glColor3f(1f, 0f, 0f);
-			gl.glVertex3f(-1, -1, -2);
-			gl.glColor3f(0f, 0f, 1f);
-			gl.glVertex3f( 1, -1, -2);
-			gl.glColor3f(0f, 1f, 0f);
-			gl.glVertex3f( 1,  1, -2);
 			gl.glColor3f(1f, 1f, 1f);
-			gl.glVertex3f(-1,  1, -2);
+			gl.glVertex3f(0, 0, 0);
+			gl.glColor3f(1f, 0f, 0f);
+			gl.glVertex3f(1, 0, 0);
+			gl.glColor3f(0f, 1f, 0f);
+			gl.glVertex3f(0,  1, 0);
+		}
+		gl.glBegin(GL2.GL_POLYGON);
+		{
+			gl.glColor3f(1f, 1f, 1f);
+			gl.glVertex3f(0, 0, 0);
+			gl.glColor3f(1f, 0f, 0f);
+			gl.glVertex3f(1, 0, 0);
+			gl.glColor3f(0f, 0f, 1f);
+			gl.glVertex3f(0,  0, 1);
+		}
+		gl.glEnd();
+		gl.glBegin(GL2.GL_POLYGON);
+		{
+			gl.glColor3f(1f, 1f, 1f);
+			gl.glVertex3f(0, 0, 0);
+			gl.glColor3f(0f, 1f, 0f);
+			gl.glVertex3f(0, 1, 0);
+			gl.glColor3f(0f, 0f, 1f);
+			gl.glVertex3f(0,  0, 1);
 		}
 		gl.glEnd();
 		
@@ -99,10 +134,23 @@ public class OWView extends JPanel implements GLEventListener{
 		glCanvas.setBounds(0, 0, (int) dim.getWidth(), (int) dim.getHeight());
 	}
 	
+	public OWObjectRepository getRepository()
+	{
+		return repository;
+	}
+	
 	@Override
 	public void repaint()
 	{
 		// TODO: Force OpenGL to repaint.
+		if (glCanvas != null)
+			glCanvas.display();
 		super.repaint();
+	}
+	
+	@Override
+	public void addKeyListener(KeyListener listener)
+	{
+		glCanvas.addKeyListener(listener);
 	}
 }

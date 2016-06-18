@@ -6,7 +6,6 @@ public class OWObjectCamera extends OWObject{
 	public int id;
 	public float fieldOfView;
 	public float[] centerOfRotation;
-	public float[] position;
 	public float[] orientation;
 	public OWObjectCamera(String name)
 	{
