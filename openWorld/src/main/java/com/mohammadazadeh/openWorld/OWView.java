@@ -98,37 +98,39 @@ public class OWView extends JPanel implements GLEventListener{
 		
 		repository.display(drawable);
 		
-		gl.glScaled(3, 3, 3);
-		gl.glBegin(GL2.GL_POLYGON);
+		if (repository.objectList.size() == 0)
 		{
-			gl.glColor3f(1f, 1f, 1f);
-			gl.glVertex3f(0, 0, 0);
-			gl.glColor3f(1f, 0f, 0f);
-			gl.glVertex3f(1, 0, 0);
-			gl.glColor3f(0f, 1f, 0f);
-			gl.glVertex3f(0,  1, 0);
+			gl.glScaled(3, 3, 3);
+			gl.glBegin(GL2.GL_POLYGON);
+			{
+				gl.glColor3f(1f, 1f, 1f);
+				gl.glVertex3f(0, 0, 0);
+				gl.glColor3f(1f, 0f, 0f);
+				gl.glVertex3f(1, 0, 0);
+				gl.glColor3f(0f, 1f, 0f);
+				gl.glVertex3f(0,  1, 0);
+			}
+			gl.glBegin(GL2.GL_POLYGON);
+			{
+				gl.glColor3f(1f, 1f, 1f);
+				gl.glVertex3f(0, 0, 0);
+				gl.glColor3f(1f, 0f, 0f);
+				gl.glVertex3f(1, 0, 0);
+				gl.glColor3f(0f, 0f, 1f);
+				gl.glVertex3f(0,  0, 1);
+			}
+			gl.glEnd();
+			gl.glBegin(GL2.GL_POLYGON);
+			{
+				gl.glColor3f(1f, 1f, 1f);
+				gl.glVertex3f(0, 0, 0);
+				gl.glColor3f(0f, 1f, 0f);
+				gl.glVertex3f(0, 1, 0);
+				gl.glColor3f(0f, 0f, 1f);
+				gl.glVertex3f(0,  0, 1);
+			}
+			gl.glEnd();
 		}
-		gl.glBegin(GL2.GL_POLYGON);
-		{
-			gl.glColor3f(1f, 1f, 1f);
-			gl.glVertex3f(0, 0, 0);
-			gl.glColor3f(1f, 0f, 0f);
-			gl.glVertex3f(1, 0, 0);
-			gl.glColor3f(0f, 0f, 1f);
-			gl.glVertex3f(0,  0, 1);
-		}
-		gl.glEnd();
-		gl.glBegin(GL2.GL_POLYGON);
-		{
-			gl.glColor3f(1f, 1f, 1f);
-			gl.glVertex3f(0, 0, 0);
-			gl.glColor3f(0f, 1f, 0f);
-			gl.glVertex3f(0, 1, 0);
-			gl.glColor3f(0f, 0f, 1f);
-			gl.glVertex3f(0,  0, 1);
-		}
-		gl.glEnd();
-		
 		gl.glFlush();
 	}
 

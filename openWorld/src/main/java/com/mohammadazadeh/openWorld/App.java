@@ -12,14 +12,17 @@ public class App
         
         OWObjectRepository repository = new OWObjectRepository();
         OWFrame frame = new OWFrame(repository);
-		OWObjectLoaderX3D objectLoader = new OWObjectLoaderX3D(repository);
+        OWObjectLoaderX3D objectLoader = new OWObjectLoaderX3D(repository);
+		frame.repaint();
 		
 		try {
+			objectLoader.load("./3D/", "Map.x3d");
 			objectLoader.load("./3D/", "Siavash.x3d");
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+		
 		frame.init();
 		frame.repaint();
     }

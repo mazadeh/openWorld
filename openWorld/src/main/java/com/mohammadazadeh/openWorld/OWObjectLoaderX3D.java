@@ -41,9 +41,13 @@ public class OWObjectLoaderX3D extends DefaultHandler{
 	    }
 		
 		File input = new File(path + name);
+		load(input);
+	}
+	public void load(File input) throws ParserConfigurationException, SAXException, IOException
+	{
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		SAXParser saxParser = factory.newSAXParser();
-		object = new OWObject(name);
+		object = new OWObject(input.getName());
 		saxParser.parse(input, this);
 		repository.objectList.put(object.name, object);
 	}
