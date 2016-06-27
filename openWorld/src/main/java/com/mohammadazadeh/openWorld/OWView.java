@@ -3,6 +3,7 @@ package com.mohammadazadeh.openWorld;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyListener;
+import java.nio.FloatBuffer;
 
 import javax.swing.JPanel;
 
@@ -13,6 +14,7 @@ import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
+import com.jogamp.opengl.util.PMVMatrix;
 
 public class OWView extends JPanel implements GLEventListener{
 
@@ -21,6 +23,10 @@ public class OWView extends JPanel implements GLEventListener{
 	private OWObjectRepository repository;
 	private OWObjectCamera cameraFreeView;
 	public  OWObjectCamera selectedCamera;
+	private PMVMatrix pmvMatrix;
+	private float[] cameraEye;
+	private float[] cameraCenter;
+	
 	
 	private GLCanvas glCanvas;
 	/**
@@ -37,6 +43,10 @@ public class OWView extends JPanel implements GLEventListener{
 		this.repository = repository;
 		this.repository.cameraList.add(cameraFreeView);
 		selectedCamera = cameraFreeView;
+
+		pmvMatrix = new PMVMatrix();
+		cameraEye = new float[3];
+		cameraCenter = new float[3];
 		
 		setBackground(new Color(1f, 1f, 0f));
 		
@@ -81,20 +91,26 @@ public class OWView extends JPanel implements GLEventListener{
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 		gl.glClearColor(0.392f, 0.584f, 0.929f, 1.0f);
 		gl.glLoadIdentity();
-		
-		if (selectedCamera.rotationTeta == null)
-			selectedCamera.rotationTeta = new float[3];
-		
-		float teta = (float)Math.PI * (selectedCamera.rotationTeta[0] / 180.0f);
-		float phi = (float)Math.PI * (selectedCamera.rotationTeta[1] / 180.0f);
+
+		pmvMatrix.glLoadIdentity();
+		doCamera(selectedCamera);
+		FloatBuffer buff = FloatBuffer.allocate(16);
+		pmvMatrix.glGetFloatv(GL2.GL_MODELVIEW_MATRIX, buff );
+		cameraEye[0] = buff.get(12) / buff.get(15);
+		cameraEye[1] = buff.get(13) / buff.get(15);
+		cameraEye[2] = buff.get(14) / buff.get(15);
+		pmvMatrix.glTranslatef(0, 0, -1);
+		pmvMatrix.glGetFloatv(GL2.GL_MODELVIEW_MATRIX, buff );
+		cameraCenter[0] = buff.get(12) / buff.get(15);
+		cameraCenter[1] = buff.get(13) / buff.get(15);
+		cameraCenter[2] = buff.get(14) / buff.get(15);
 		
 		
 		glu.gluLookAt(
-				selectedCamera.position[0] * Math.cos(teta) * Math.cos(phi),
-				selectedCamera.position[0] * Math.sin(phi) + selectedCamera.position[0],
-				selectedCamera.position[0] * Math.sin(teta) * Math.cos(phi),
-				0, selectedCamera.position[1], 0,
+				cameraEye[0], cameraEye[1], cameraEye[2],
+				cameraCenter[0], cameraCenter[1], cameraCenter[2],
 				0, 1, 0);
+		
 		
 		repository.display(drawable);
 		
@@ -163,5 +179,28 @@ public class OWView extends JPanel implements GLEventListener{
 	public void addKeyListener(KeyListener listener)
 	{
 		glCanvas.addKeyListener(listener);
+	}
+	
+	private void doCamera(OWObject object)
+	{
+		if (object == null)
+			return;
+		if (object.parentObject != null)
+		{
+			doCamera(object.parentObject);
+		}
+		
+		if (object.position != null)
+			pmvMatrix.glTranslatef(object.position[0], object.position[1], object.position[2]);
+		if (object.rotation != null)
+			pmvMatrix.glRotatef(object.rotation[3], object.rotation[0], object.rotation[1], object.rotation[2]);
+		if (object.rotationTeta != null)
+		{
+			pmvMatrix.glRotatef(object.rotationTeta[0], 1, 0, 0);
+			pmvMatrix.glRotatef(object.rotationTeta[1], 0, 1, 0);
+			pmvMatrix.glRotatef(object.rotationTeta[2], 0, 0, 1);
+		}
+		if (object.scale != null)
+			pmvMatrix.glScalef(object.scale[0], object.scale[1], object.scale[2]);
 	}
 }
