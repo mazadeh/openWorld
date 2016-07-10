@@ -16,8 +16,14 @@ public class App
 		frame.repaint();
 		
 		try {
-			objectLoader.load("./3D/", "Map.x3d");
+			objectLoader.load("./3D/", "Floor.x3d");
 			objectLoader.load("./3D/", "Siavash.x3d");
+			repository.floor = repository.objectList.get("Floor.x3d").subObjects.get("Floor_TRANSFORM").subObjects.get("Floor_ifs_TRANSFORM");
+			repository.avatar = repository.objectList.get("Siavash.x3d");
+			repository.avatar.position = new float[3];
+			
+			repository.avatarPosIndex = 10;
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

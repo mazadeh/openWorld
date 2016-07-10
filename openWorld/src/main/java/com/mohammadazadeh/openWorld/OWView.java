@@ -111,7 +111,12 @@ public class OWView extends JPanel implements GLEventListener{
 				cameraCenter[0], cameraCenter[1], cameraCenter[2],
 				0, 1, 0);
 		
-		
+		if (repository.avatar != null)
+		{
+			repository.avatar.position[0] = repository.floor.vertices.get(repository.avatarPosIndex)[0];
+			repository.avatar.position[1] = repository.floor.vertices.get(repository.avatarPosIndex)[2];
+			repository.avatar.position[2] = repository.floor.vertices.get(repository.avatarPosIndex)[1];
+		}
 		repository.display(drawable);
 		
 		if (repository.objectList.size() == 0)
