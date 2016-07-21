@@ -14,7 +14,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-public class OWFrame extends JFrame implements KeyListener, ActionListener {
+public class OWFrame extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	final private int width = 1024;
@@ -55,7 +55,7 @@ public class OWFrame extends JFrame implements KeyListener, ActionListener {
 
 		view = new OWView(this.repository);
 		view.setBounds(0, 25, 800, 551);
-		view.addKeyListener(this);
+		view.addKeyListener(view);
 		
 		menuPanel = new OWMenuPanel(view);
 		menuPanel.setBounds(800, 25, 224, 551);
@@ -83,44 +83,7 @@ public class OWFrame extends JFrame implements KeyListener, ActionListener {
 		super.repaint();
 	}
 
-	@Override
-	public void keyPressed(KeyEvent event) {
-		switch (event.getKeyCode())
-		{
-		case KeyEvent.VK_UP:
-			repository.avatarPosIndex ++;
-			break;
-		case KeyEvent.VK_DOWN:
-			repository.avatarPosIndex --;
-			break;
-		case KeyEvent.VK_LEFT:
-			view.selectedCamera.rotationTeta[0]++;
-			break;
-		case KeyEvent.VK_RIGHT:
-			view.selectedCamera.rotationTeta[0]--;
-			break;
-		case KeyEvent.VK_MINUS:
-			view.selectedCamera.position[0]++;
-			break;
-		case KeyEvent.VK_EQUALS:
-			view.selectedCamera.position[0]--;
-			break;
-		}
-		view.repaint();
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		String command = event.getActionCommand();
@@ -145,5 +108,10 @@ public class OWFrame extends JFrame implements KeyListener, ActionListener {
 	        }
 			break;
 		}
+	}
+	
+	public void startAnimator()
+	{
+		view.startAnimator();
 	}
 }

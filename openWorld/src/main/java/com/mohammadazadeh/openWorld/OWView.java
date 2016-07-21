@@ -2,8 +2,11 @@ package com.mohammadazadeh.openWorld;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.nio.FloatBuffer;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import javax.swing.JPanel;
 
@@ -14,9 +17,11 @@ import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
+import com.jogamp.opengl.util.Animator;
+import com.jogamp.opengl.util.FPSAnimator;
 import com.jogamp.opengl.util.PMVMatrix;
 
-public class OWView extends JPanel implements GLEventListener{
+public class OWView extends JPanel implements GLEventListener, KeyListener{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -27,8 +32,9 @@ public class OWView extends JPanel implements GLEventListener{
 	private float[] cameraEye;
 	private float[] cameraCenter;
 	
-	
 	private GLCanvas glCanvas;
+	private FPSAnimator animator;
+	// private Queue<KeyEvent> keyEvents;
 	/**
 	 * Create the panel.
 	 */
@@ -57,6 +63,8 @@ public class OWView extends JPanel implements GLEventListener{
 		glCanvas.addGLEventListener(this);
 		add(glCanvas);
 		glCanvas.display();
+		
+		// keyEvents = new LinkedList<KeyEvent>();
 	}
 
 	public void init(GLAutoDrawable drawable) {
@@ -77,6 +85,9 @@ public class OWView extends JPanel implements GLEventListener{
         gl.glLoadIdentity();
         gl.glEnable(GL2.GL_DEPTH_TEST);
         gl.glEnable(GL2.GL_DOUBLEBUFFER);
+        
+        animator = new FPSAnimator(drawable, 5);
+        //animator.setRunAsFastAsPossible(true);
 	}
 
 	public void dispose(GLAutoDrawable drawable) {
@@ -86,36 +97,31 @@ public class OWView extends JPanel implements GLEventListener{
 
 	public void display(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
-		GLU glu = GLU.createGLU(gl);
 		
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 		gl.glClearColor(0.392f, 0.584f, 0.929f, 1.0f);
 		gl.glLoadIdentity();
 
-		pmvMatrix.glLoadIdentity();
-		doCamera(selectedCamera);
-		FloatBuffer buff = FloatBuffer.allocate(16);
-		pmvMatrix.glGetFloatv(GL2.GL_MODELVIEW_MATRIX, buff );
-		cameraEye[0] = buff.get(12) / buff.get(15);
-		cameraEye[1] = buff.get(13) / buff.get(15);
-		cameraEye[2] = buff.get(14) / buff.get(15);
-		pmvMatrix.glTranslatef(0, 0, -1);
-		pmvMatrix.glGetFloatv(GL2.GL_MODELVIEW_MATRIX, buff );
-		cameraCenter[0] = buff.get(12) / buff.get(15);
-		cameraCenter[1] = buff.get(13) / buff.get(15);
-		cameraCenter[2] = buff.get(14) / buff.get(15);
-		
-		
-		glu.gluLookAt(
-				cameraEye[0], cameraEye[1], cameraEye[2],
-				cameraCenter[0], cameraCenter[1], cameraCenter[2],
-				0, 1, 0);
-		
-		if (repository.avatar != null)
+		/*
+		KeyEvent keyEvent;
+    	while ((keyEvent = keyEvents.poll()) != null)
+    	{
+    		doKeyEvent(keyEvent);
+    	}
+		*/
+		doCamera(drawable);
+
+		try{
+			if (repository.avatar != null && repository.avatarHolder != null)
+			{
+				repository.avatarHolder.position[0] = repository.map.vertices.get(repository.avatarPosIndex)[0];
+				repository.avatarHolder.position[2] = repository.map.vertices.get(repository.avatarPosIndex)[2];
+				repository.avatar.position[2] = repository.map.vertices.get(repository.avatarPosIndex)[1];
+			}
+		}
+		catch (Exception ex)
 		{
-			repository.avatar.position[0] = repository.floor.vertices.get(repository.avatarPosIndex)[0];
-			repository.avatar.position[1] = repository.floor.vertices.get(repository.avatarPosIndex)[2];
-			repository.avatar.position[2] = repository.floor.vertices.get(repository.avatarPosIndex)[1];
+			
 		}
 		repository.display(drawable);
 		
@@ -186,13 +192,36 @@ public class OWView extends JPanel implements GLEventListener{
 		glCanvas.addKeyListener(listener);
 	}
 	
-	private void doCamera(OWObject object)
+	private void doCamera(GLAutoDrawable drawable) {
+		GL2 gl = drawable.getGL().getGL2();
+    	GLU glu = GLU.createGLU(gl);
+    	
+		pmvMatrix.glLoadIdentity();
+		doCameraHandler(selectedCamera);
+		FloatBuffer buff = FloatBuffer.allocate(16);
+		pmvMatrix.glGetFloatv(GL2.GL_MODELVIEW_MATRIX, buff );
+		cameraEye[0] = buff.get(12) / buff.get(15);
+		cameraEye[1] = buff.get(13) / buff.get(15);
+		cameraEye[2] = buff.get(14) / buff.get(15);
+		pmvMatrix.glTranslatef(0, 0, -1);
+		pmvMatrix.glGetFloatv(GL2.GL_MODELVIEW_MATRIX, buff );
+		cameraCenter[0] = buff.get(12) / buff.get(15);
+		cameraCenter[1] = buff.get(13) / buff.get(15);
+		cameraCenter[2] = buff.get(14) / buff.get(15);
+		
+		glu.gluLookAt(
+				cameraEye[0], cameraEye[1], cameraEye[2],
+				cameraCenter[0], cameraCenter[1], cameraCenter[2],
+				0, 1, 0);
+	}
+	
+	private void doCameraHandler(OWObject object)
 	{
 		if (object == null)
 			return;
 		if (object.parentObject != null)
 		{
-			doCamera(object.parentObject);
+			doCameraHandler(object.parentObject);
 		}
 		
 		if (object.position != null)
@@ -207,5 +236,57 @@ public class OWView extends JPanel implements GLEventListener{
 		}
 		if (object.scale != null)
 			pmvMatrix.glScalef(object.scale[0], object.scale[1], object.scale[2]);
+	}
+
+	public void startAnimator() {
+		animator.start();
+	}
+	
+	@Override
+	public void keyPressed(KeyEvent event) {
+		// keyEvents.add(event);
+		doKeyEvent(event);
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private void doKeyEvent(KeyEvent event)
+	{
+		switch (event.getKeyCode())
+		{
+		case KeyEvent.VK_UP:
+			if (repository.avatarPosIndex < repository.map.length * repository.map.width - repository.map.length)
+				repository.avatarPosIndex += repository.map.length;
+			break;
+		case KeyEvent.VK_DOWN:
+			if (repository.avatarPosIndex >= repository.map.length)
+				repository.avatarPosIndex -= repository.map.length;
+			break;
+		case KeyEvent.VK_LEFT:
+			if ((repository.avatarPosIndex > 0) && (repository.avatarPosIndex % repository.map.length != 0))
+				repository.avatarPosIndex --;
+			break;
+		case KeyEvent.VK_RIGHT:
+			if ((repository.avatarPosIndex < repository.map.length * repository.map.width - 1) && ((repository.avatarPosIndex + 1) % repository.map.length != 0))
+				repository.avatarPosIndex ++;
+			break;
+		case KeyEvent.VK_MINUS:
+			selectedCamera.position[0]++;
+			break;
+		case KeyEvent.VK_EQUALS:
+			selectedCamera.position[0]--;
+			break;
+		}
+		//repaint();
 	}
 }

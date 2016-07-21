@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.0//EN" "http://www.web3d.org/specifications/x3d-3.0.dtd">
+<X3D version="3.0" profile="Immersive" xmlns:xsd="http://www.w3.org/2001/XMLSchema-instance" xsd:noNamespaceSchemaLocation="http://www.web3d.org/specifications/x3d-3.0.xsd">
+	<head>
+		<meta name="filename" content="Free Camera.x3d" />
+		<meta name="generator" content="Blender 2.76 (sub 0)" />
+	</head>
+	<Scene>
+		<NavigationInfo headlight="true"
+		                visibilityLimit="0.0"
+		                type='"EXAMINE", "ANY"'
+		                avatarSize="0.25, 1.75, 0.75"
+		                />
+		<Background DEF="WO_World"
+		            groundColor="0.051 0.051 0.051"
+		            skyColor="0.051 0.051 0.051"
+		            />
+		<Transform DEF="Free_Camera_TRANSFORM"
+		           translation="-6.000000 9.000000 -6.000000"
+		           scale="1.000000 1.000000 1.000000"
+		           rotation="-0.093040 -0.968740 -0.229969 2.347037"
+		           >
+			<Viewpoint DEF="CA_Free_Camera"
+			           centerOfRotation="0 0 0"
+			           position="0.00 0.00 0.00"
+			           orientation="0.00 1.00 0.09 0.00"
+			           fieldOfView="0.858"
+			           />
+		</Transform>
+	</Scene>
+</X3D>

@@ -29,16 +29,16 @@ public class OWObjectLoaderX3D extends DefaultHandler{
 	
 	public void load(String path, String name) throws ParserConfigurationException, SAXException, IOException
 	{
-		File folder = new File(path);
-		File[] listOfFiles = folder.listFiles();
+		//File folder = new File(path);
+		//File[] listOfFiles = folder.listFiles();
 
-	    for (int i = 0; i < listOfFiles.length; i++) {
+	    //for (int i = 0; i < listOfFiles.length; i++) {
 	      //if (listOfFiles[i].isFile()) {
-	        System.out.println("File " + listOfFiles[i].getName());
+	      //  System.out.println("File " + listOfFiles[i].getName());
 	      //} else if (listOfFiles[i].isDirectory()) {
 	      //  System.out.println("Directory " + listOfFiles[i].getName());
 	      //}
-	    }
+	    //}
 		
 		File input = new File(path + name);
 		load(input);
@@ -52,10 +52,12 @@ public class OWObjectLoaderX3D extends DefaultHandler{
 		repository.objectList.put(object.name, object);
 	}
 	
+	private String currentFileName;
+	
 	@Override
 	public void startDocument()
 	{
-		
+		System.out.print("Loading ");
 	}
 	
 	@Override
@@ -64,6 +66,13 @@ public class OWObjectLoaderX3D extends DefaultHandler{
 		
 		switch (qName)
 		{
+		case "meta":
+			if (attributes.getValue("name").equals("filename"))
+			{
+				currentFileName = attributes.getValue("content");
+				System.out.println(currentFileName + " ...");
+			}
+			break;
 		case "Transform":
 			OWObject obj = new OWObject(attributes.getValue("DEF"));
 			obj.parentObject = object;
@@ -309,6 +318,6 @@ public class OWObjectLoaderX3D extends DefaultHandler{
 	@Override
 	public void endDocument()
 	{
-		System.out.println("Loading finished successfully.");
+		System.out.println("Loading " + currentFileName + " finished successfully.");
 	}
 }

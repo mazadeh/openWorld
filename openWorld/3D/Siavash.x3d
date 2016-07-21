@@ -383,26 +383,26 @@
 				           />
 			</Transform>
 			<Transform DEF="Camera_3_TRANSFORM"
-			           translation="-16.000000 0.000000 3.500000"
+			           translation="10.000000 0.000000 6.500000"
 			           scale="1.000000 1.000000 1.000000"
-			           rotation="0.559808 -0.559809 -0.610924 2.044767"
+			           rotation="0.497543 0.497543 0.710565 1.906030"
 			           >
 				<Viewpoint DEF="CA_Camera_3"
 				           centerOfRotation="0 0 0"
 				           position="0.00 0.00 -0.00"
-				           orientation="0.00 0.00 1.00 0.00"
+				           orientation="0.00 1.00 0.00 0.00"
 				           fieldOfView="0.858"
 				           />
 			</Transform>
 			<Transform DEF="Camera_2_TRANSFORM"
-			           translation="9.367466 14.430645 13.344376"
+			           translation="12.000000 7.500000 7.500000"
 			           scale="1.000000 1.000000 1.000000"
-			           rotation="0.245572 0.495794 0.832996 2.358994"
+			           rotation="0.314366 0.544497 0.777623 2.297614"
 			           >
 				<Viewpoint DEF="CA_Camera_2"
 				           centerOfRotation="0 0 0"
-				           position="0.00 -0.00 0.00"
-				           orientation="0.97 0.15 0.20 0.00"
+				           position="0.00 0.00 -0.00"
+				           orientation="0.00 -0.34 0.94 0.00"
 				           fieldOfView="0.858"
 				           />
 			</Transform>

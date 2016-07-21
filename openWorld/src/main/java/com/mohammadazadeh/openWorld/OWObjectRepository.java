@@ -13,8 +13,10 @@ public class OWObjectRepository {
 	public Map<String, OWObjectMaterial> materialList;
 	public List<OWObjectCamera> cameraList;
 	public List<OWObjectLight> lightList;
-	public OWObject floor;
 	public OWObject avatar;
+	public OWObject avatarHolder;
+	public OWMap map;
+	
 	public int avatarPosIndex;
 	
 	public OWObjectRepository()
