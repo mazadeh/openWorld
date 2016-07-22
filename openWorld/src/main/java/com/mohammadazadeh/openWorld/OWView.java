@@ -124,6 +124,8 @@ public class OWView extends JPanel implements GLEventListener, KeyListener{
 			
 		}
 		repository.display(drawable);
+		if (! repository.lighting)
+			gl.glDisable(GL2.GL_LIGHTING);
 		
 		if (repository.objectList.size() == 0)
 		{

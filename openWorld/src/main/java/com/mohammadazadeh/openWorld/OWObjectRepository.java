@@ -16,6 +16,7 @@ public class OWObjectRepository {
 	public OWObject avatar;
 	public OWObject avatarHolder;
 	public OWMap map;
+	public boolean lighting;
 	
 	public int avatarPosIndex;
 	
@@ -25,6 +26,7 @@ public class OWObjectRepository {
 		materialList = new HashMap<String, OWObjectMaterial>();
 		cameraList = new ArrayList<OWObjectCamera>();
 		lightList = new ArrayList<OWObjectLight>();
+		lighting = false;
 	}
 	
 	public void display(GLAutoDrawable drawable) {

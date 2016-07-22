@@ -1,5 +1,7 @@
 package com.mohammadazadeh.openWorld;
 
+import java.io.IOException;
+
 /**
  * Hello world!
  *
@@ -37,6 +39,13 @@ public class App
 		frame.startAnimator();
 		frame.init();
 		frame.repaint();
+		OWServer server;
+		try {
+			server = new OWServer(9090, repository);
+		} catch (IOException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 		
     }
 }

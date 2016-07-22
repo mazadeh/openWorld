@@ -19,7 +19,7 @@ public class OWObject {
 	public float[] rotationTeta;
 	public float[] scale;
 	
-	public OWObject parentObject;
+	public transient OWObject parentObject;
 	public Map<String, OWObject> subObjects;
 	
 	public OWObject(String name)

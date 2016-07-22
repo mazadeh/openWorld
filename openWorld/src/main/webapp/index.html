@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="./favicon.ico">
+
+    <title>Open World</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <!-- Custom styles for this template -->
+    <link href="./css/jumbotron-narrow.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="container">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation" class="active"><a href="#">Home</a></li>
+            <li role="presentation"><a href="http://github.com/mazadeh">About</a></li>
+            <li role="presentation"><a href="http://mohammadazadeh.com">Contact</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">Open World</h3>
+      </div>
+
+      <div class="jumbotron">
+        <h1>Open World View</h1>
+        <h2>Online Controller</h2>
+        <hr/>
+        <p class="lead">This is an OpenGL project powerd by JOGL. For more information, check our <a href="http://github.com/mazadeh/openWorld">github</a>.</p>
+        <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#myModal">Get Start</button>
+      </div>
+      
+      <!-- Modal -->
+      <div class="modal fade" id="myModal" role="dialog" onkeypress="keyPressed(event)">
+        <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Viewport Controller</h4>
+            </div>
+            <div class="modal-body">
+              <table>
+              <tr>
+              <td>
+                <br/> 
+                <table>
+                  <tr>
+                    <td></td>
+                    <td>
+                      <a id="up-key" href="http://localhost:9090/openWorld?move=up" class="btn btn-default" target="iframe">
+                        <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                      </a>
+                    </td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <a id="left-key" href="http://localhost:9090/openWorld?move=left" class="btn btn-default" target="iframe">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                      </a>
+                    </td>
+                    <td>
+                      <a id="eye-key" href="http://localhost:9090/openWorld?light=switch" class="btn btn-default" target="iframe">
+                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                      </a>
+                    </td>
+                    <td>
+                      <a id="right-key" href="http://localhost:9090/openWorld?move=right" class="btn btn-default" target="iframe">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                      </a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>
+                      <a id="down-key" href="http://localhost:9090/openWorld?move=down" class="btn btn-default" target="iframe">
+                        <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                      </a>
+                    </td>
+                    <td></td>
+                  </tr>
+                </table>
+              </td>
+              <td>
+                <iframe src="" name="iframe" style="width: 100%;">
+                  <p>Your browser does not support iframes.</p>
+                </iframe>
+              </td>
+              </tr>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>      
+        </div>
+      </div>
+      <!-- /Modal -->
+      
+      <!--
+      <div class="row marketing">
+        <div class="col-lg-6">
+          <h4>Subheading</h4>
+          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+
+          <h4>Subheading</h4>
+          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+
+          <h4>Subheading</h4>
+          <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+        </div>
+
+        <div class="col-lg-6">
+          <h4>Subheading</h4>
+          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+
+          <h4>Subheading</h4>
+          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+
+          <h4>Subheading</h4>
+          <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+        </div>
+      </div>
+      -->
+      
+      <footer class="footer">
+        <p>&copy; 2016 Mohammad Azadeh, <a href="http://www.asha-co.ir">www.asha-co.ir</a></p>
+      </footer>
+
+    </div> <!-- /container -->
+    
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script>
+      function keyPressed(event) {
+        var x = event.which || event.keyCode;
+        if (x === 119)
+          document.getElementById("up-key").click();
+        else if (x === 97)
+          document.getElementById("left-key").click();
+        else if (x === 115)
+          document.getElementById("down-key").click();
+        else if (x === 100)
+          document.getElementById("right-key").click();
+        else if (x === 108)
+          document.getElementById("eye-key").click();
+      }
+    </script>
+
+  </body>
+</html>
+
